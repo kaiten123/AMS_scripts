@@ -42,11 +42,11 @@
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 # One liner to get the debug info (default params, NO AEM restart)
-# wget -O getDumps.sh https://cdn1.frocdn.ch/5Loc80EOEwQOZvg.sh && chmod +x getDumps.sh && ./getDumps.sh --restartAEM=false
+# wget -O getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x getDumps.sh && ./getDumps.sh --restartAEM=false
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 # USE WITH CAUTION: One liner to get the debug info (default params, WITH AEM restart)
-# wget -O getDumps.sh https://cdn1.frocdn.ch/5Loc80EOEwQOZvg.sh && chmod +x getDumps.sh && ./getDumps.sh --restartAEM=true
+# wget -O getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x getDumps.sh && ./getDumps.sh --restartAEM=true
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 # Script uploaded to: https://cdn1.frocdn.ch
@@ -75,7 +75,16 @@ DEFAULT_RESTART_AEM=false
 # Constants
 ORIGINAL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TIMESTAMP=$(date +%d-%m-%Y-%H.%M.%S)
-CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+'); 
+CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
+threadUser="crx"
+
+# checking if the crx user exists on the instance
+if ! id "$threadUser" &>/dev/null; then
+    echo ""
+    print_red "User $threadUser does not exist on instance ($HOSTNAME), exiting..."
+    echo ""
+    exit 1
+fi
 
 # Set default values
 destination="$DEFAULT_DESTINATION"
@@ -153,7 +162,6 @@ cd "$destination/$folderName" || {
 }
 
 # take thread dump
-threadUser="crx"
 echo "--->>> Taking thread and heap dumps"
 
 while [ $threadCount -gt 0 ]
@@ -167,14 +175,14 @@ done
 
 jstack_log="thread-$HOSTNAME-$TIMESTAMP.log"
 echo ""
-echo "--->>> Running: sudo -u crx /usr/java/latest/bin/jstack '$CQ5_PID' >> '$jstack_log'"
-sudo -u crx /usr/java/latest/bin/jstack "$CQ5_PID" >> "$jstack_log"
+echo "--->>> Running: sudo -u $threadUser /usr/java/latest/bin/jstack '$CQ5_PID' >> '$jstack_log'"
+sudo -u $threadUser /usr/java/latest/bin/jstack "$CQ5_PID" >> "$jstack_log"
 
 # take heap dump
 heap_dump="heapdump-$TIMESTAMP.hprof"
-sudo chown -R crx:crx $destination
-echo "--->>> Running: sudo -u crx /usr/java/latest/bin/jcmd '$CQ5_PID' GC.heap_dump '$destination/$folderName/$heap_dump'"
-sudo -u crx /usr/java/latest/bin/jcmd "$CQ5_PID" GC.heap_dump "$destination/$folderName/$heap_dump"
+sudo chown -R $threadUser:$threadUser $destination
+echo "--->>> Running: sudo -u $threadUser /usr/java/latest/bin/jcmd '$CQ5_PID' GC.heap_dump '$destination/$folderName/$heap_dump'"
+sudo -u $threadUser /usr/java/latest/bin/jcmd "$CQ5_PID" GC.heap_dump "$destination/$folderName/$heap_dump"
 
 # fixing permissions for the heap dump file so downloading via amstool works
 sudo chmod 644 $destination/$folderName/$heap_dump
