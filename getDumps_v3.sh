@@ -32,7 +32,6 @@
 # Logic:
 # - The script accepts parameters to customize the data collection behavior.
 # - It creates a timestamped folder in the destination directory to store data.
-# - It downloads jstackSeries.
 # - Thread dumps and process information are archived in zip files.
 # - A heap dump is collected and zipped.
 # - The script can optionally restart the AEM service, with retries and process checks.
