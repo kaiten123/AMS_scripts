@@ -26,4 +26,7 @@ echo "first command"
 sudo -u crx /usr/java/latest/bin/java -Dtar.memoryMapped=true -Xmx$AVAILABLE_RAM -jar oak-run-$OAK_VERSION.jar checkpoints /mnt/crx/$runMode/crx-quickstart/repository/segmentstore rm-unreferenced
 echo "second command"
 nohup sudo -u crx nohup /usr/java/latest/bin/java -Dtar.memoryMapped=true -Xmx$AVAILABLE_RAM -jar oak-run-$OAK_VERSION.jar compact /mnt/crx/$runMode/crx-quickstart/repository/segmentstore &
-echo "done"
+echo "OTC done"
+echo ""
+echo "Starting AEM."
+service cq5 start
