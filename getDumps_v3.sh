@@ -78,6 +78,14 @@ TIMESTAMP=$(date +%d-%m-%Y-%H.%M.%S)
 CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
 threadUser="crx"
 
+if [ -z "$CQ5_PID" ]
+then
+    echo ""
+    print_red "\$CQ5_PID is empty, AEM not running on this machine."
+    echo ""
+    exit 1
+fi
+
 # checking if the crx user exists on the instance
 if ! id "$threadUser" &>/dev/null; then
     echo ""
@@ -227,20 +235,20 @@ echo "$destination/$folderName"
 # AEM restart mechanism
 echo ""
 if [ "$restartAEM" = true ]; then
-    service cq5 stop
-
-    # Add a delay to allow the process to shut down
-    sleep 10 # Adjust the sleep duration if needed
-
+    CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
     attempt=1
     while [ $attempt -le 3 ]; do
         echo "Attempt $attempt to check process status..."
-        if kill -0 $CQ5_PID 2>/dev/null; then
-            echo "Stopping AEM failed"
-            sleep 5 # Wait a bit before re-checking
-        else
+        service cq5 stop
+        CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
+        sleep 5 # Wait a bit before re-checking
+        if [ -z "$CQ5_PID" ] 
+        then
             echo "AEM stopped - could not find process $CQ5_PID"
             break
+        else
+            echo "Stopping AEM failed"
+            sleep 5 # Wait a bit before re-checking
         fi
         ((attempt++))
     done
