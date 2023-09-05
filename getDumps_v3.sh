@@ -41,11 +41,11 @@
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 # One liner to get the debug info (default params, NO AEM restart)
-# wget -O getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x getDumps.sh && ./getDumps.sh --restartAEM=false
+# mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x /mnt/tmp/diagnose/scripts/getDumps.sh && /mnt/tmp/diagnose/scripts/getDumps.sh --restartAEM=false
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 # USE WITH CAUTION: One liner to get the debug info (default params, WITH AEM restart)
-# wget -O getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x getDumps.sh && ./getDumps.sh --restartAEM=true
+# mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x /mnt/tmp/diagnose/scripts/getDumps.sh && /mnt/tmp/diagnose/scripts/getDumps.sh --restartAEM=true
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 # Script uploaded to: https://cdn1.frocdn.ch
@@ -235,7 +235,7 @@ echo "$destination/$folderName"
 # AEM restart mechanism
 echo ""
 if [ "$restartAEM" = true ]; then
-    wget -O /mnt/tmp/diagnose/scripts/aem-stop.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-stop.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-stop.sh && ./mnt/tmp/diagnose/scripts/aem-stop.sh
+    mkdir -p /mnt/tmp/diagnose/scripts/ && wget -O /mnt/tmp/diagnose/scripts/aem-stop.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-stop.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-stop.sh && /mnt/tmp/diagnose/scripts/aem-stop.sh
     echo ""
     echo "Starting AEM."
     service cq5 start

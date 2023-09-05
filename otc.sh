@@ -1,3 +1,7 @@
+# One liner to get the OTC on both pub or authors
+# mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/otc.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/otc.sh && chmod +x /mnt/tmp/diagnose/scripts/otc.sh && /mnt/tmp/diagnose/scripts/otc.sh
+# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 
 AVAILABLE_RAM="14G"
 DIR="/mnt/crx/author"
