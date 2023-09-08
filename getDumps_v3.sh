@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
+# One liner to get the debug info (default params, NO AEM restart)
+# mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x /mnt/tmp/diagnose/scripts/getDumps.sh && /mnt/tmp/diagnose/scripts/getDumps.sh --restartAEM=false
+# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
+# USE WITH CAUTION: One liner to get the debug info (default params, WITH AEM restart)
+# mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x /mnt/tmp/diagnose/scripts/getDumps.sh && /mnt/tmp/diagnose/scripts/getDumps.sh --restartAEM=true
+# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
+
+
 # Description:
 # This script collects diagnostic information for AEM.
 # It takes various parameters to customize its behavior, such as thread count,
@@ -38,17 +50,7 @@
 
 # For ideas and bugs, reach out to Mihai Tica (mtica@adobe.com)
 
-# ----------------------------------------------------------------------------------------
-# ----------------------------------------------------------------------------------------
-# One liner to get the debug info (default params, NO AEM restart)
-# mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x /mnt/tmp/diagnose/scripts/getDumps.sh && /mnt/tmp/diagnose/scripts/getDumps.sh --restartAEM=false
-# ----------------------------------------------------------------------------------------
-# ----------------------------------------------------------------------------------------
-# USE WITH CAUTION: One liner to get the debug info (default params, WITH AEM restart)
-# mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x /mnt/tmp/diagnose/scripts/getDumps.sh && /mnt/tmp/diagnose/scripts/getDumps.sh --restartAEM=true
-# ----------------------------------------------------------------------------------------
-# ----------------------------------------------------------------------------------------
-# Script uploaded to: https://cdn1.frocdn.ch
+
 
 # Linux version, not tested on RHEL 8
 if [ -f /etc/redhat-release ]; then
