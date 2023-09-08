@@ -6,16 +6,16 @@
 CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
 attempt=1
 while [ $attempt -le 3 ]; do
-    echo "Attempt $attempt to check process status..."
+    echo "Attempt $attempt to stop process..."
     service cq5 stop
     CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
     sleep 5 # Wait a bit before re-checking
     if [ -z "$CQ5_PID" ] 
     then
-        echo "AEM stopped - could not find process $CQ5_PID"
+        echo "AEM successfully stopped - could not find process $CQ5_PID"
         break
     else
-        echo "Stopping AEM failed"
+        echo "Stopping AEM failed, tried $attempt times"
         sleep 5 # Wait a bit before re-checking
     fi
     ((attempt++))
