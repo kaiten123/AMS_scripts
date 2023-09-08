@@ -35,5 +35,6 @@ fi
 if [ $attempt -gt 3 ]; then
     echo "Restart failed after $attempt attempts. Killing process $CQ5_PID."
     kill -9 $CQ5_PID
+    servicestop
 fi
 echo ""
