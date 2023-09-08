@@ -29,3 +29,4 @@ done
 
 if [ $attempt -gt 3 ]; then
     echo "Failed to start AEM after 3 attempts."
+fi
