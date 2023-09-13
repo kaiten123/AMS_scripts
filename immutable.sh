@@ -1,11 +1,31 @@
 #!/bin/bash
 
 # mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/immutable.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/immutable.sh && chmod +x /mnt/tmp/diagnose/scripts/immutable.sh && /mnt/tmp/diagnose/scripts/immutable.sh
-# chattr +i 02-dispatcher.conf && chattr +i 10-mod_security.conf
+# chattr +i /etc/httpd/conf.modules.d/02-dispatcher.conf && chattr +i /etc/httpd/conf.modules.d/10-mod_security.conf
 
 folder_path="/etc/httpd/conf.modules.d"
 log_file="$folder_path/processed_files.log"
 
+listImmutableFiles () {
+    for file in "$folder_path"/*; do
+        if [ -f "$file" ] && [[ "$(basename "$file")" != "processed_files.log" ]] && [[ "$(basename "$file")" != "immutable.sh" ]]; then
+            if [ -n "$(lsattr "$file" | awk '$1 ~ /-i/')" ]; then
+                echo "$(basename "$file")" >> "$log_file"
+            fi
+        fi
+    done
+}
+
+removeImmutableAttributeAndLog () {
+    for file in "$folder_path"/*; do
+        if [ -f "$file" ] && [[ "$(basename "$file")" != "processed_files.log" ]] && [[ "$(basename "$file")" != "immutable.sh" ]]; then
+            if [ -n "$(lsattr "$file" | awk '$1 ~ /-i/')" ]; then
+                chattr -i "$file"
+                echo "$(basename "$file")" >> "$log_file"
+            fi
+        fi
+    done
+}
 
 if [ $# -eq 0 ]; then
 
@@ -51,7 +71,9 @@ if [ "$action" = "set" ]; then
         fi
     done < "$log_file"
 
-    echo "Restored +i attribute to files in $folder_path:"
+    # TODO: list files here
+    # echo "Restored +i attribute to files in $folder_path:"
+    # listImmutableFiles
 
     # Delete the log file
     rm "$log_file"
@@ -62,14 +84,7 @@ elif [ "$action" = "unset" ]; then
     # Step 2: Remove +i attribute from files and update the log
     > "$log_file"  # Clear the log file
 
-    for file in "$folder_path"/*; do
-        if [ -f "$file" ] && [[ "$(basename "$file")" != "processed_files.log" ]] && [[ "$(basename "$file")" != "immutable.sh" ]]; then
-            if [ -n "$(lsattr -d "$file" | awk '$1 ~ /-i/')" ]; then
-                chattr -i "$file"
-                echo "$(basename "$file")" >> "$log_file"
-            fi
-        fi
-    done
+    removeImmutableAttributeAndLog
 
     echo ""
     echo "Removed +i attribute from files in $folder_path and updated the log $log_file:"
