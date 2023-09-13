@@ -16,6 +16,8 @@ if [ $# -eq 0 ]; then
         echo ""
         echo "Please manually delete it and run the script again."
         echo "rm -rf $log_file"
+        echo ""
+        echo "Exiting..."
         exit 1
     fi
 
