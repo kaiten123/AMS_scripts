@@ -11,7 +11,10 @@ if [ $# -eq 0 ]; then
 
     # Check if the log file exists
     if [ -f "$log_file" ]; then
-        echo "The $log_file file already exists in $folder_path. Please manually delete it and run the script again."
+        echo ""
+        echo "The $log_file file already exists in $folder_path."
+        echo ""
+        echo "Please manually delete it and run the script again."
         echo "rm -rf $log_file"
         exit 1
     fi
@@ -22,7 +25,9 @@ if [ $# -eq 0 ]; then
 else
     # Check if the log file exists, stop if file not found
     if [ ! -f "$log_file" ]; then
-        echo "Could not find $log_file in $folder_path, exiting..."
+        echo ""
+        echo "Could not find $log_file in $folder_path"
+        echo "Exiting..."
         exit 1
     fi
 
@@ -64,6 +69,7 @@ elif [ "$action" = "unset" ]; then
         fi
     done
 
+    echo ""
     echo "Removed +i attribute from files in $folder_path and updated the log $log_file:"
     cat "$log_file"
 else
