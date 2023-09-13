@@ -1,5 +1,5 @@
 # One liner to get the OTC on both pub or authors
-# mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/otc.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/otc.sh && chmod +x /mnt/tmp/diagnose/scripts/otc.sh && /mnt/tmp/diagnose/scripts/otc.sh
+# mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/otc.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/otc.sh && chmod +x /mnt/tmp/diagnose/scripts/otc.sh && /mnt/tmp/diagnose/scripts/otc.sh
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ while true; do
 done
 
 # stopping AEM with 3 retries
-mkdir -p /mnt/tmp/diagnose/scripts/ && wget -O /mnt/tmp/diagnose/scripts/aem-stop.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-stop.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-stop.sh && /mnt/tmp/diagnose/scripts/aem-stop.sh
+mkdir -p /mnt/tmp/diagnose/scripts/ && wget -q -O /mnt/tmp/diagnose/scripts/aem-stop.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-stop.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-stop.sh && /mnt/tmp/diagnose/scripts/aem-stop.sh
 
 DIR="/mnt/crx/author"
 if [ -d "$DIR" ]; then
@@ -49,4 +49,4 @@ nohup sudo -u crx nohup /usr/java/latest/bin/java -Dtar.memoryMapped=true -Xmx$A
 echo "OTC done"
 echo ""
 # starting AEM with 3 retries
-mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/aem-start.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-start.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-start.sh && /mnt/tmp/diagnose/scripts/aem-start.sh
+mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/aem-start.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-start.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-start.sh && /mnt/tmp/diagnose/scripts/aem-start.sh
