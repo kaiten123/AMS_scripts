@@ -5,7 +5,7 @@
 
 # Ask the user for input until it's valid
 while true; do
-    echo "Please enter a value for AVAILABLE_RAM (integer between 1 and 200):"
+    echo "Please enter a value for AVAILABLE_RAM (integer between 1 and 200, e.g. 15):"
     read input_ram
 
     # Check if input is an integer and between 1 and 200
@@ -28,16 +28,22 @@ else
 fi
 
 echo "Running in $runMode mode"
-OAK_VERSION=$(unzip -q -c $(find /mnt/crx/$runMode/crx-quickstart/launchpad/felix -name bundle.jar -exec grep -l oak-core {} + | tail -n 1) META-INF/MANIFEST.MF | grep "Bundle-Version" | awk '{print $2}' |tr -d '\r')
 
+echo "Determining OAK version"
+OAK_VERSION=$(unzip -q -c $(find /mnt/crx/$runMode/crx-quickstart/launchpad/felix -name bundle.jar -exec grep -l oak-core {} + | tail -n 1) META-INF/MANIFEST.MF | grep "Bundle-Version" | awk '{print $2}' |tr -d '\r')
+echo "OAK version is $OAK_VERSION"
 cd /mnt/crx/*/crx-quickstart
-echo "oak version is $OAK_VERSION"
+
+echo "Getting oak-run-$OAK_VERSION.jar"
 wget https://repo1.maven.org/maven2/org/apache/jackrabbit/oak-run/$OAK_VERSION/oak-run-$OAK_VERSION.jar
-echo "done getting"
+
+echo "Executing sudo -u crx /usr/java/latest/bin/java -Dtar.memoryMapped=true -Xmx$AVAILABLE_RAM -jar oak-run-$OAK_VERSION.jar checkpoints /mnt/crx/$runMode/crx-quickstart/repository/segmentstore"
 sudo -u crx /usr/java/latest/bin/java -Dtar.memoryMapped=true -Xmx$AVAILABLE_RAM -jar oak-run-$OAK_VERSION.jar checkpoints /mnt/crx/$runMode/crx-quickstart/repository/segmentstore
-echo "first command"
+
+echo "Executing sudo -u crx /usr/java/latest/bin/java -Dtar.memoryMapped=true -Xmx$AVAILABLE_RAM -jar oak-run-$OAK_VERSION.jar checkpoints /mnt/crx/$runMode/crx-quickstart/repository/segmentstore rm-unreferenced"
 sudo -u crx /usr/java/latest/bin/java -Dtar.memoryMapped=true -Xmx$AVAILABLE_RAM -jar oak-run-$OAK_VERSION.jar checkpoints /mnt/crx/$runMode/crx-quickstart/repository/segmentstore rm-unreferenced
-echo "second command"
+
+echo "Executing nohup sudo -u crx nohup /usr/java/latest/bin/java -Dtar.memoryMapped=true -Xmx$AVAILABLE_RAM -jar oak-run-$OAK_VERSION.jar compact /mnt/crx/$runMode/crx-quickstart/repository/segmentstore &"
 nohup sudo -u crx nohup /usr/java/latest/bin/java -Dtar.memoryMapped=true -Xmx$AVAILABLE_RAM -jar oak-run-$OAK_VERSION.jar compact /mnt/crx/$runMode/crx-quickstart/repository/segmentstore &
 echo "OTC done"
 echo ""
