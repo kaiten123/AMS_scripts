@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# wget -O immutable.sh https://cdn1.frocdn.ch/EIu9RL7eUud6wPP.sh && chmod +x immutable.sh
+# wget -q -O immutable.sh https://cdn1.frocdn.ch/EIu9RL7eUud6wPP.sh && chmod +x immutable.sh
 # chattr +i 02-dispatcher.conf && chattr +i 10-mod_security.conf
 
 folder_path="/etc/httpd/conf.modules.d"

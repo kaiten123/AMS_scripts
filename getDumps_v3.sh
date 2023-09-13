@@ -3,11 +3,11 @@
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 # One liner to get the debug info (default params, NO AEM restart)
-# mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x /mnt/tmp/diagnose/scripts/getDumps.sh && /mnt/tmp/diagnose/scripts/getDumps.sh --restartAEM=false
+# mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x /mnt/tmp/diagnose/scripts/getDumps.sh && /mnt/tmp/diagnose/scripts/getDumps.sh --restartAEM=false
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 # USE WITH CAUTION: One liner to get the debug info (default params, WITH AEM restart)
-# mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x /mnt/tmp/diagnose/scripts/getDumps.sh && /mnt/tmp/diagnose/scripts/getDumps.sh --restartAEM=true
+# mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/getDumps.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/getDumps_v3.sh && chmod +x /mnt/tmp/diagnose/scripts/getDumps.sh && /mnt/tmp/diagnose/scripts/getDumps.sh --restartAEM=true
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 
@@ -222,7 +222,7 @@ echo ""
 if [ "$restartAEM" = true ]; then
     echo ""
     echo "Starting AEM."
-    mkdir -p /mnt/tmp/diagnose/scripts && wget -O /mnt/tmp/diagnose/scripts/aem-restart.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-restart.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-restart.sh && /mnt/tmp/diagnose/scripts/aem-restart.sh
+    mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/aem-restart.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-restart.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-restart.sh && /mnt/tmp/diagnose/scripts/aem-restart.sh
 fi
 
 # showing download links
