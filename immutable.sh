@@ -10,7 +10,7 @@ listImmutableFiles () {
     for file in "$folder_path"/*; do
         if [ -f "$file" ] && [[ "$(basename "$file")" != "processed_files.log" ]] && [[ "$(basename "$file")" != "immutable.sh" ]]; then
             if [ -n "$(lsattr "$file" | awk '$1 ~ /-i/')" ]; then
-                echo "$(basename "$file")" >> "$log_file"
+                echo "$(basename "$file")"
             fi
         fi
     done
@@ -57,23 +57,14 @@ else
 fi
 
 if [ "$action" = "set" ]; then
-
-    # Step 1: Restore +i attribute to files listed in the log file
-    echo "Putting back the +i attribute for files in $folder_path"
-    if [ ! -f "$log_file" ]; then
-        echo "No processed files found in the log."
-        exit 1
-    fi
-
     while IFS= read -r filename; do
         if [ "$filename" != "immutable.sh" ]; then
             chattr +i "$folder_path/$filename"
         fi
     done < "$log_file"
 
-    # TODO: list files here
-    # echo "Restored +i attribute to files in $folder_path:"
-    # listImmutableFiles
+    echo "Restored +i attribute to files in $folder_path:"
+    listImmutableFiles
 
     # Delete the log file
     rm "$log_file"
