@@ -5,6 +5,8 @@
 
 # Ask the user for input until it's valid
 while true; do
+    echo ""
+    echo ""
     echo "Please enter a value for AVAILABLE_RAM (integer between 1 and 200, e.g. 15):"
     read input_ram
 
