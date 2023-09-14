@@ -199,6 +199,7 @@ sudo chmod 644 $destination/$folderName/$heap_dump
 
 echo "--->>> Zipping files"
 zip -q ../jstack-"$TIMESTAMP".zip "$jstack_log"
+zip -q ../jstack-"$TIMESTAMP".zip "jstack.*"
 zip -q ../processes-"$TIMESTAMP".zip top*
 # using watch so the connection does not close if zipping takes too long
 (
