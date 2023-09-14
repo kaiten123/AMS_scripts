@@ -198,9 +198,9 @@ sudo -u $threadUser /usr/java/latest/bin/jcmd "$CQ5_PID" GC.heap_dump "$destinat
 sudo chmod 644 $destination/$folderName/$heap_dump
 
 echo "--->>> Zipping files"
-zip -q ../jstack-"$TIMESTAMP".zip "jstack.*"
-zip -q ../jstack-"$TIMESTAMP".zip "$jstack_log"
-zip -q ../processes-"$TIMESTAMP".zip top*
+zip -q ../jstack-$TIMESTAMP.zip jstack*
+zip -q ../jstack-$TIMESTAMP.zip $jstack_log
+zip -q ../processes-$TIMESTAMP.zip top*
 # using watch so the connection does not close if zipping takes too long
 (
     (sleep 1 && while pgrep zip > /dev/null; do echo -n "."; sleep 1; done) &
