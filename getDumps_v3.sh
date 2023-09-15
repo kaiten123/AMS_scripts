@@ -50,9 +50,7 @@
 
 # For ideas and bugs, reach out to Mihai Tica (mtica@adobe.com)
 
-
-
-# Linux version, not tested on RHEL 8
+# Checking Linux version, not tested on RHEL 8
 mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/version-check.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/version-check.sh && chmod +x /mnt/tmp/diagnose/scripts/version-check.sh && /mnt/tmp/diagnose/scripts/version-check.sh
 
 # Function to print text in red color

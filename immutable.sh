@@ -3,6 +3,9 @@
 # mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/immutable.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/immutable.sh && chmod +x /mnt/tmp/diagnose/scripts/immutable.sh && /mnt/tmp/diagnose/scripts/immutable.sh
 # chattr +i /etc/httpd/conf.modules.d/02-dispatcher.conf && chattr +i /etc/httpd/conf.modules.d/10-mod_security.conf
 
+# Checking Linux version, not tested on RHEL 8
+mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/version-check.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/version-check.sh && chmod +x /mnt/tmp/diagnose/scripts/version-check.sh && /mnt/tmp/diagnose/scripts/version-check.sh
+
 folder_path="/etc/httpd/conf.modules.d"
 log_file="$folder_path/processed_files.log"
 

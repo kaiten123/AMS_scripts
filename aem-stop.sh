@@ -3,6 +3,9 @@
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 
+# Checking Linux version, not tested on RHEL 8
+mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/version-check.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/version-check.sh && chmod +x /mnt/tmp/diagnose/scripts/version-check.sh && /mnt/tmp/diagnose/scripts/version-check.sh
+
 CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
 attempt=1
 
