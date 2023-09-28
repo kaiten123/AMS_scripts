@@ -210,14 +210,6 @@ find . -type f ! -name "*.zip" -exec rm -f {} +
 # Return to initial folder
 cd "$ORIGINAL_DIR"
 
-# AEM restart mechanism
-echo ""
-if [ "$restartAEM" = true ]; then
-    echo ""
-    echo "Starting AEM."
-    mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/aem-restart.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-restart.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-restart.sh && /mnt/tmp/diagnose/scripts/aem-restart.sh
-fi
-
 # showing download links
 echo ""
 echo ""
@@ -234,3 +226,11 @@ echo "amstool scp $HOSTNAME $destination/$folderName/heap_dump-$TIMESTAMP.zip ~/
 echo ""
 echo "Thread and heap dumps for $HOSTNAME collected at:"
 echo "$destination/$folderName"
+
+# AEM restart mechanism
+echo ""
+if [ "$restartAEM" = true ]; then
+    echo ""
+    echo "Starting AEM."
+    mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/aem-restart.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-restart.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-restart.sh && /mnt/tmp/diagnose/scripts/aem-restart.sh
+fi
