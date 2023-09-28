@@ -163,9 +163,15 @@ cd "$destination/$folderName" || {
     exit 1
 }
 
+# copying logs
+echo "--->>> Copying logs"
+mkdir -p "$destination/$folderName/logs"
+cp /var/log/aem/error.log $destination/$folderName/logs/
+cp /var/log/aem/audit.log $destination/$folderName/logs/
+cp /var/log/aem/history.log $destination/$folderName/logs/
+
 # take thread dump
 echo "--->>> Taking thread and heap dumps"
-
 while [ $threadCount -gt 0 ]
 do
     top -H -b -n1 -p $CQ5_PID > top.$CQ5_PID.$(date +%H%M%S.%N) &
@@ -189,27 +195,6 @@ sudo -u $threadUser /usr/java/latest/bin/jcmd "$CQ5_PID" GC.heap_dump "$destinat
 # fixing permissions for the heap dump file so downloading via amstool works
 sudo chmod 644 $destination/$folderName/$heap_dump
 
-echo "--->>> Zipping files"
-zip -q ../jstack-$TIMESTAMP.zip jstack*
-zip -q ../jstack-$TIMESTAMP.zip $jstack_log
-zip -q ../processes-$TIMESTAMP.zip top*
-# using watch so the connection does not close if zipping takes too long
-(
-    (sleep 1 && while pgrep zip > /dev/null; do echo -n "."; sleep 1; done) &
-    zip -q ../heap_dump-"$TIMESTAMP".zip "$heap_dump"
-)
-
-# move zips to diagnose folder
-mv ../jstack-"$TIMESTAMP".zip .
-mv ../processes-"$TIMESTAMP".zip .
-mv ../heap_dump-"$TIMESTAMP".zip .
-
-# cleanup other files, keep only .zip
-find . -type f ! -name "*.zip" -exec rm -f {} +
-
-# Return to initial folder
-cd "$ORIGINAL_DIR"
-
 # showing download links
 echo ""
 echo ""
@@ -224,8 +209,36 @@ echo ""
 echo "Heap dump:"
 echo "amstool scp $HOSTNAME $destination/$folderName/heap_dump-$TIMESTAMP.zip ~/Downloads/"
 echo ""
+echo "Logs:"
+echo "amstool scp $HOSTNAME $destination/$folderName/logs-$TIMESTAMP.zip ~/Downloads/"
+echo ""
 echo "Thread and heap dumps for $HOSTNAME collected at:"
 echo "$destination/$folderName"
+
+echo "--->>> Zipping files"
+zip -q ../jstack-$TIMESTAMP.zip jstack*
+zip -q ../jstack-$TIMESTAMP.zip $jstack_log
+zip -q ../processes-$TIMESTAMP.zip top*
+zip -q ../logs-$TIMESTAMP.zip logs/*
+# using watch so the connection does not close if zipping takes too long
+(
+    (sleep 1 && while pgrep zip > /dev/null; do echo -n "."; sleep 1; done) &
+    zip -q ../heap_dump-"$TIMESTAMP".zip "$heap_dump"
+)
+
+# move zips to diagnose folder
+mv ../jstack-"$TIMESTAMP".zip .
+mv ../processes-"$TIMESTAMP".zip .
+mv ../heap_dump-"$TIMESTAMP".zip .
+mv ../logs-$TIMESTAMP.zip .
+
+# cleanup other files, keep only .zip
+find . -type f ! -name "*.zip" -exec rm -f {} +
+rm -rf logs
+
+# Return to initial folder
+cd "$ORIGINAL_DIR"
+echo "--->>> all archives created"
 
 # AEM restart mechanism
 echo ""
