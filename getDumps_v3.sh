@@ -232,6 +232,7 @@ echo ""
 echo "Thread and heap dumps for $HOSTNAME collected at:"
 echo "$destination/$folderName"
 
+echo ""
 echo "--->>> Creating archives"
 zip -q ../jstack-$TIMESTAMP.zip jstack*
 zip -q ../jstack-$TIMESTAMP.zip $jstack_log
@@ -253,16 +254,13 @@ mv ../logs-$TIMESTAMP.zip .
 # count number of archives, if not 4 then do not cleanup
 zipNumber=$(ls *.zip | wc -l)
 if [ $zipNumber = 4 ]; then
-echo "/n"
-echo "--->>> Clearing files"
-find . -type f ! -name "*.zip" -exec rm -f {} +
-rm -rf logs
+    echo ""
+    echo "--->>> Clearing files"
+    find . -type f ! -name "*.zip" -exec rm -f {} +
+    rm -rf logs
 else
-echo "Found ${zipNumber} ZIP files in ${$destination/$folderName}, expected 4. Not clearing files, do the cleanup manually."
+    echo "Found ${zipNumber} ZIP files in ${$destination/$folderName}, expected 4. Not clearing files, do the cleanup manually."
 fi
-
-# ls *.zip | wc -l
-
 
 # Return to initial folder
 cd "$ORIGINAL_DIR"
