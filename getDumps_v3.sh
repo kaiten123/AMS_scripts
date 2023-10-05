@@ -232,7 +232,7 @@ echo ""
 echo "Thread and heap dumps for $HOSTNAME collected at:"
 echo "$destination/$folderName"
 
-echo "--->>> Zipping files"
+echo "--->>> Creating archives"
 zip -q ../jstack-$TIMESTAMP.zip jstack*
 zip -q ../jstack-$TIMESTAMP.zip $jstack_log
 zip -q ../processes-$TIMESTAMP.zip top*
@@ -253,7 +253,8 @@ mv ../logs-$TIMESTAMP.zip .
 # count number of archives, if not 4 then do not cleanup
 zipNumber=$(ls *.zip | wc -l)
 if [ $zipNumber = 4 ]; then
-echo "Clearing files"
+echo "/n"
+echo "--->>> Clearing files"
 find . -type f ! -name "*.zip" -exec rm -f {} +
 rm -rf logs
 else
@@ -265,7 +266,7 @@ fi
 
 # Return to initial folder
 cd "$ORIGINAL_DIR"
-echo "--->>> all archives created"
+echo "--->>> ${zipNumber} archives created"
 
 # AEM restart mechanism
 echo ""
