@@ -163,12 +163,29 @@ cd "$destination/$folderName" || {
     exit 1
 }
 
+DIR="/mnt/crx/author"
+if [ -d "$DIR" ]; then
+    aemType="author"
+    aemPort="4502"
+else
+    aemType="publish"
+    aemPort="4503"
+fi
+
 # copying logs
 echo "--->>> Copying logs"
 mkdir -p "$destination/$folderName/logs"
 cp /var/log/aem/error.log $destination/$folderName/logs/
 cp /var/log/aem/audit.log $destination/$folderName/logs/
+cp /var/log/aem/access.log $destination/$folderName/logs/
+cp /mnt/crx/$aemType/crx-quickstart/logs/gc* $destination/$folderName/logs/
 cp /var/log/aem/history.log $destination/$folderName/logs/
+
+#curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:4502/system/console/bundles.json -o /mnt/tmp/diagnose/mtica-testing-author1useast1-28-09-2023-15.34.11/logs/bundles.json
+curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/bundles.json -o $destination/$folderName/logs/bundles.json
+curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/status-Configurations.txt -o $destination/$folderName/logs/status-Configurations.txt
+curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/components.json -o $destination/$folderName/logs/components.json
+
 
 # take thread dump
 echo "--->>> Taking thread and heap dumps"
@@ -233,8 +250,18 @@ mv ../heap_dump-"$TIMESTAMP".zip .
 mv ../logs-$TIMESTAMP.zip .
 
 # cleanup other files, keep only .zip
+# count number of archives, if not 4 then do not cleanup
+zipNumber=$(ls *.zip | wc -l)
+if [ $zipNumber = 4 ]; then
+echo "Clearing files"
 find . -type f ! -name "*.zip" -exec rm -f {} +
 rm -rf logs
+else
+echo "Found ${zipNumber} ZIP files in ${$destination/$folderName}, expected 4. Not clearing files, do the cleanup manually."
+fi
+
+# ls *.zip | wc -l
+
 
 # Return to initial folder
 cd "$ORIGINAL_DIR"
