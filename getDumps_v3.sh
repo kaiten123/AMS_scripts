@@ -182,9 +182,9 @@ cp /mnt/crx/$aemType/crx-quickstart/logs/gc* $destination/$folderName/logs/
 cp /var/log/aem/history.log $destination/$folderName/logs/
 
 #curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:4502/system/console/bundles.json -o /mnt/tmp/diagnose/mtica-testing-author1useast1-28-09-2023-15.34.11/logs/bundles.json
-curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/bundles.json -o $destination/$folderName/logs/bundles.json
-curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/status-Configurations.txt -o $destination/$folderName/logs/status-Configurations.txt
-curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/components.json -o $destination/$folderName/logs/components.json
+# curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/bundles.json -o $destination/$folderName/logs/bundles.json
+# curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/status-Configurations.txt -o $destination/$folderName/logs/status-Configurations.txt
+# curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/components.json -o $destination/$folderName/logs/components.json
 
 
 # take thread dump
