@@ -67,7 +67,8 @@ DEFAULT_RESTART_AEM=false
 # Constants
 ORIGINAL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TIMESTAMP=$(date +%d-%m-%Y-%H.%M.%S)
-CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
+# CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
+CQ5_PID=$(systemctl status cq5 | grep -oP 'Main PID: \K\d+');
 threadUser="crx"
 
 if [ -z "$CQ5_PID" ]
