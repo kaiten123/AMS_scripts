@@ -11,7 +11,7 @@ attempt=1
 
 while [ $attempt -le 3 ]; do
     echo "Attempt $attempt to stop process..."
-    service cq5 stop
+    systemctl stop cq5
     sleep 5 # Wait a bit after trying to stop before re-checking
     CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
 
