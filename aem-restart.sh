@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 
-# Checking Linux version, not tested on RHEL 8
+# Checking Linux version, not tested on RHEL 7
 mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/version-check.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/version-check.sh && chmod +x /mnt/tmp/diagnose/scripts/version-check.sh && /mnt/tmp/diagnose/scripts/version-check.sh
 
 # stopping AEM with 3 retries
