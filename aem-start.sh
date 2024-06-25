@@ -11,7 +11,7 @@ attempt=1
 
 while [ $attempt -le 3 ]; do
     echo "Attempt $attempt to start AEM..."
-    service cq5 start
+    systemctl start cq5
     sleep 5 # Wait a bit after trying to start before re-checking
     CQ5_PID=$(echo "$(service cq5 status)" | grep -oP 'PID: \K\d+');
 
