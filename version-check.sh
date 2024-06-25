@@ -9,8 +9,8 @@
 if [ -f /etc/redhat-release ]; then
     version=$(cat /etc/redhat-release)
     echo "Detected Linux Version: $version"
-    if [[ "$version" == *"release 8"* ]]; then
-        echo "Script not tested on Red Hat 8, exiting..."
+    if [[ "$version" == *"release 7"* ]]; then
+        echo "Script not tested on Red Hat 7, exiting..."
         exit 1
     fi
 fi
