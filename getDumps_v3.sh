@@ -11,7 +11,6 @@
 # ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 
-
 # Description:
 # This script collects diagnostic information for AEM.
 # It takes various parameters to customize its behavior, such as thread count,
@@ -45,7 +44,7 @@
 # - The script accepts parameters to customize the data collection behavior.
 # - It creates a timestamped folder in the destination directory to store data.
 # - Thread dumps and process information are archived in zip files.
-# - A heap dump is collected and zipped.
+# - A heap dump is collected (left as raw .hprof; not archived by default).
 # - The script can optionally restart the AEM service, with retries and process checks.
 
 # For ideas and bugs, reach out to Mihai Tica (mtica@adobe.com)
@@ -182,12 +181,6 @@ cp /var/log/aem/access.log $destination/$folderName/logs/
 cp /mnt/crx/$aemType/crx-quickstart/logs/gc* $destination/$folderName/logs/
 cp /var/log/aem/history.log $destination/$folderName/logs/
 
-#curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:4502/system/console/bundles.json -o /mnt/tmp/diagnose/mtica-testing-author1useast1-28-09-2023-15.34.11/logs/bundles.json
-# curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/bundles.json -o $destination/$folderName/logs/bundles.json
-# curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/status-Configurations.txt -o $destination/$folderName/logs/status-Configurations.txt
-# curl -v -u admin:$(pass CQ_Admin) -X GET http://localhost:$aemPort/system/console/components.json -o $destination/$folderName/logs/components.json
-
-
 # take thread dump
 echo "--->>> Taking thread and heap dumps"
 while [ $threadCount -gt 0 ]
@@ -204,7 +197,7 @@ echo ""
 echo "--->>> Running: sudo -u $threadUser /usr/java/latest/bin/jstack '$CQ5_PID' >> '$jstack_log'"
 sudo -u $threadUser /usr/java/latest/bin/jstack "$CQ5_PID" >> "$jstack_log"
 
-# take heap dump
+# take heap dump (left as raw .hprof; not zipped by default)
 heap_dump="heapdump-$TIMESTAMP.hprof"
 sudo chown -R $threadUser:$threadUser $destination
 echo "--->>> Running: sudo -u $threadUser /usr/java/latest/bin/jcmd '$CQ5_PID' GC.heap_dump '$destination/$folderName/$heap_dump'"
@@ -224,8 +217,8 @@ echo ""
 echo "Processes list:"
 echo "amstool scp $HOSTNAME $destination/$folderName/processes-$TIMESTAMP.zip ~/Downloads/"
 echo ""
-echo "Heap dump:"
-echo "amstool scp $HOSTNAME $destination/$folderName/heap_dump-$TIMESTAMP.zip ~/Downloads/"
+echo "Heap dump (RAW .hprof, not archived):"
+echo "amstool scp $HOSTNAME $destination/$folderName/$heap_dump ~/Downloads/"
 echo ""
 echo "Logs:"
 echo "amstool scp $HOSTNAME $destination/$folderName/logs-$TIMESTAMP.zip ~/Downloads/"
@@ -239,28 +232,22 @@ zip -q ../jstack-$TIMESTAMP.zip jstack*
 zip -q ../jstack-$TIMESTAMP.zip $jstack_log
 zip -q ../processes-$TIMESTAMP.zip top*
 zip -q ../logs-$TIMESTAMP.zip logs/*
-# using watch so the connection does not close if zipping takes too long
-(
-    (sleep 1 && while pgrep zip > /dev/null; do echo -n "."; sleep 1; done) &
-    zip -q ../heap_dump-"$TIMESTAMP".zip "$heap_dump"
-)
 
 # move zips to diagnose folder
 mv ../jstack-"$TIMESTAMP".zip .
 mv ../processes-"$TIMESTAMP".zip .
-mv ../heap_dump-"$TIMESTAMP".zip .
 mv ../logs-$TIMESTAMP.zip .
 
-# cleanup other files, keep only .zip
-# count number of archives, if not 4 then do not cleanup
+# cleanup other files, keep only .zip and the raw heap dump
+# count number of archives, if not 3 then do not cleanup
 zipNumber=$(ls *.zip | wc -l)
-if [ $zipNumber = 4 ]; then
+if [ $zipNumber = 3 ]; then
     echo ""
-    echo "--->>> Clearing files"
-    find . -type f ! -name "*.zip" -exec rm -f {} +
+    echo "--->>> Clearing files (keeping *.zip and *.hprof)"
+    find . -type f ! -name "*.zip" ! -name "*.hprof" -exec rm -f {} +
     rm -rf logs
 else
-    echo "Found ${zipNumber} ZIP files in ${$destination/$folderName}, expected 4. Not clearing files, do the cleanup manually."
+    echo "Found ${zipNumber} ZIP files in ${$destination/$folderName}, expected 3. Not clearing files, do the cleanup manually."
 fi
 
 # Return to initial folder
@@ -274,3 +261,6 @@ if [ "$restartAEM" = true ]; then
     echo "Starting AEM."
     mkdir -p /mnt/tmp/diagnose/scripts && wget -q -O /mnt/tmp/diagnose/scripts/aem-restart.sh https://raw.githubusercontent.com/kaiten123/AMS_scripts/main/aem-restart.sh && chmod +x /mnt/tmp/diagnose/scripts/aem-restart.sh && /mnt/tmp/diagnose/scripts/aem-restart.sh
 fi
+
+# To manually archive the heap dump later (optional):
+# cd "$destination/$folderName" && zip -q "heap_dump-$TIMESTAMP.zip" "$heap_dump"
